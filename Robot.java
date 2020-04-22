@@ -28,8 +28,8 @@ public class Robot{
 		alive = true;
 		this.x = x;
 		this.y = y;
-		dx = 0;
-		dy = 0;
+		dx = (Math.random()>.5)?Math.random():-Math.random();
+		dy = (Math.random()>.5)?Math.random():-Math.random();
 		brain = new FeedForward(Robot.BRAIN_INPUT_NODES,Robot.BRAIN_HIDDEN_LAYERS,Robot.BRAIN_HIDDEN_NODES,Robot.BRAIN_OUTPUT_NODES);
 	}
 

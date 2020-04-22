@@ -10,7 +10,7 @@ public class Simulation extends JPanel{
 	final static Point GLOBAL_SPAWN = new Point(WINDOW_DIMENSION.width/2,WINDOW_DIMENSION.height/2);
 
 
-
+	final static Point GOAL = new Point(50,50);
 
 	boolean isRunningSimulation = true;
 
@@ -40,7 +40,7 @@ public class Simulation extends JPanel{
 
 
 	public void update(){
-		genetic.update();
+		genetic.update(); 
 		repaint();
 	}
 

@@ -9,19 +9,19 @@ public class GeneticAlgorthim{
 
 
 
-	int maxPop;
-	double fitnessScale;
-	double mutationRate;
+	public int maxPop;
+	public double fitnessScale;
+	public double mutationRate;
 
-	Robot[] robots;
+	public Robot[] robots;
 
 
 	public int generation;
 	public double highestFitness;
 
-	boolean toNextGeneration;
+	public boolean toNextGeneration;
 
-	Point globalSpawn;
+	public Point globalSpawn;
 
 	public GeneticAlgorthim(int maxPop, double mutationRate, Point globalSpawn){
 		this.maxPop = maxPop;
@@ -57,7 +57,6 @@ public class GeneticAlgorthim{
 			//transition to next generation
 			transitionToNextGeneration();
 		}else{
-
 			stepRobots();
 			checkIfContinueGeneration();
 		}
@@ -99,7 +98,8 @@ public class GeneticAlgorthim{
 
 	public void draw(Graphics g){
 		for(Robot r : robots){
-			r.draw(g);
+			if(r!=null)
+			   r.draw(g);
 		}
 	}
 
