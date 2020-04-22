@@ -11,6 +11,7 @@ public class Simulation extends JPanel{
 
 
 
+
 	boolean isRunningSimulation = true;
 
 	GeneticAlgorthim genetic;
@@ -28,9 +29,8 @@ public class Simulation extends JPanel{
 
 	public void simulationCycle(){
 
-		genetic = new GeneticAlgorthim(GeneticAlgorthim.TEST_MAX_POP,GeneticAlgorthim.TEST_FITNESS_SCALE,GeneticAlgorthim.TEST_MUTATION_RATE);
-		System.out.println(GLOBAL_SPAWN.x);
-		genetic.populateAt(GLOBAL_SPAWN.x,GLOBAL_SPAWN.y);
+		genetic = new GeneticAlgorthim(GeneticAlgorthim.TEST_MAX_POP,GeneticAlgorthim.TEST_MUTATION_RATE,Simulation.GLOBAL_SPAWN);
+		genetic.populate();
 
 		while(isRunningSimulation){
 			update();
@@ -40,7 +40,7 @@ public class Simulation extends JPanel{
 
 
 	public void update(){
-		
+		genetic.update();
 		repaint();
 	}
 

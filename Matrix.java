@@ -1,5 +1,5 @@
 public class Matrix{
-	private double[][] m;
+	public double[][] m;
 
 	public Matrix(int row, int col){
 		m = new double[row][col];
@@ -59,6 +59,7 @@ public class Matrix{
 	}
 
 	public Matrix multiBy(Matrix m2){
+
 		double[][] mTrans = new double[m.length][m2.m[0].length];
 		for(int r = 0; r < mTrans.length; r++){
 			for(int c = 0; c < mTrans[0].length; c++){
@@ -95,9 +96,7 @@ public class Matrix{
 		Matrix act = clone(this);
 		for(int r = 0; r < act.m.length; r++){
 			for(int c = 0; c < act.m[0].length; c++){
-				System.out.println(act.m[r][c]);
 				act.m[r][c] = sigmoid(act.m[r][c]);
-				System.out.println(act.m[r][c]);
 			}
 		}
 		return act;

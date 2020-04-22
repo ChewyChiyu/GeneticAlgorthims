@@ -21,7 +21,7 @@ public class Robot{
 	double x,y;
 	double dx,dy;
 
-	boolean alive;
+	public boolean alive;
 
 	public Robot(double x, double y){
 		fitness = 0;
@@ -33,10 +33,27 @@ public class Robot{
 		brain = new FeedForward(Robot.BRAIN_INPUT_NODES,Robot.BRAIN_HIDDEN_LAYERS,Robot.BRAIN_HIDDEN_NODES,Robot.BRAIN_OUTPUT_NODES);
 	}
 
+	public Robot(double x, double y, Robot parent, double mutationRate){
+		fitness = 0;
+		alive = true;
+		this.x = x;
+		this.y = y;
+		dx = 0;
+		dy = 0;
+		brain = new FeedForward(parent.brain,mutationRate);
+	}
+
+	public void mutate(){
+
+	}
 
 	public void move(){
 		x+=dx;
 		y+=dy;
+	}
+
+	public void calcVel(){
+
 	}
 
 	public void draw(Graphics g){

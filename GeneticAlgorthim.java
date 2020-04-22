@@ -4,8 +4,10 @@ public class GeneticAlgorthim{
 
 
 	final static int TEST_MAX_POP = 10;
-	final static double TEST_FITNESS_SCALE = 4;
 	final static double TEST_MUTATION_RATE = .3;
+
+
+
 
 	int maxPop;
 	double fitnessScale;
@@ -15,14 +17,19 @@ public class GeneticAlgorthim{
 
 
 	public int generation;
-	public int highestFitness;
+	public double highestFitness;
 
-	public GeneticAlgorthim(int maxPop, double fitnessScale, double mutationRate ){
+	boolean toNextGeneration;
+
+	Point globalSpawn;
+
+	public GeneticAlgorthim(int maxPop, double mutationRate, Point globalSpawn){
 		this.maxPop = maxPop;
-		this.fitnessScale = fitnessScale;
 		this.mutationRate = mutationRate;
+		this.globalSpawn = globalSpawn;
 		generation = 0;
 		highestFitness = 0;
+		toNextGeneration = false;
 	}
 
 	public void refreshHighestFitness(){
@@ -32,15 +39,60 @@ public class GeneticAlgorthim{
 	}
 
 	
-	public void populateAt(int x, int y){
+	public void populate(){
 		robots = new Robot[maxPop];
 		for(int index = 0; index < robots.length; index++){
-			robots[index] = new Robot(x,y);
+			robots[index] = new Robot(globalSpawn.x,globalSpawn.y);
 		}
+	}
+
+	public void respawnIntoPool(Robot best){
+		for(int index = 0; index < robots.length; index++){
+			robots[index] = new Robot(globalSpawn.x,globalSpawn.y,best,mutationRate);
+		}
+	}
+
+	public void update(){
+		if(toNextGeneration){ 
+			//transition to next generation
+			transitionToNextGeneration();
+		}else{
+
+			stepRobots();
+			checkIfContinueGeneration();
+		}
+
+	}
+
+	public void transitionToNextGeneration(){
+		refreshHighestFitness();
+		Robot best  = pruneHighestFitnessRobot();
+		respawnIntoPool(best);
+		generation++;
+		toNextGeneration = true;
+	}
+
+	public Robot pruneHighestFitnessRobot(){
+		Robot best = null;
+		for(Robot r: robots){
+			if(best == null) best = r;
+			best = (best.fitness < r.fitness) ? r : best;
+		}
+		return best;
+	}
+
+	public void checkIfContinueGeneration(){
+		//if all robots dead continue to next generation
+		boolean continueToNext = true;
+		for(Robot r: robots){
+			if(r.alive) continueToNext = false;
+		}
+
 	}
 
 	public void stepRobots(){
 		for(Robot r: robots){
+			r.calcVel();
 			r.move();
 		}
 	}

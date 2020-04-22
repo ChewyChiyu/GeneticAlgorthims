@@ -1,26 +1,20 @@
 public class FeedForward{
 
 
+	final static double DELTA_MUTATION_SHIFT = 0.1; 
 
-	int inputNodes; //only one layer
-    Matrix inputToHiddenWeight;
+	public int inputNodes; //only one layer
+    public Matrix inputToHiddenWeight;
 
-	int hiddenLayers; //number of layers
-	int hiddenNodes; //nodes per layer (shared)
-    Matrix[] hiddenToHiddenWeights;
-    Matrix[] hiddenBiases;
-
-
-    int outputNodes; //only one layer
-	Matrix hiddenToOutput;
-	Matrix outputBias;
+	public int hiddenLayers; //number of layers
+	public int hiddenNodes; //nodes per layer (shared)
+    public Matrix[] hiddenToHiddenWeights;
+    public Matrix[] hiddenBiases;
 
 
-	
-	
-
-	
-
+    public int outputNodes; //only one layer
+	public Matrix hiddenToOutput;
+	public Matrix outputBias;
 
 	public FeedForward(int inputNodes, int hiddenLayers, int hiddenNodes, int outputNodes){
 		
@@ -74,13 +68,51 @@ public class FeedForward{
 		}
 
 		//hidden layer to output layer
-		hiddenToOutput = hiddenToOutput.multiBy(hidden);
-		hiddenToOutput = hiddenToOutput.addBy(outputBias);
-		hiddenToOutput = hiddenToOutput.sigmoidActivation();
+		Matrix output = hiddenToOutput.multiBy(hidden);
+		output = output.addBy(outputBias);
+		output = output.sigmoidActivation();
 
-		return hiddenToOutput.toStreamArray();
+		return output.toStreamArray();
 
 	}
 
+	public FeedForward(FeedForward clone, double mutationRate){
+
+
+		inputNodes = clone.inputNodes; 
+   		//inputToHiddenWeight = Matrix.clone(clone.inputToHiddenWeight);
+   		inputToHiddenWeight = mutate(clone.inputToHiddenWeight,mutationRate);
+
+		hiddenLayers = clone.hiddenLayers; 
+		hiddenNodes = clone.hiddenLayers;
+
+		hiddenToHiddenWeights = new Matrix[hiddenLayers];
+		hiddenBiases = new Matrix[hiddenLayers];
+
+		for(int index = 0; index < clone.hiddenLayers; index++){
+			//hiddenToHiddenWeights[index] = (clone.hiddenToHiddenWeights[index]);
+			//hiddenBiases[index] = (clone.hiddenBiases[index]);
+			hiddenToHiddenWeights[index] = mutate(clone.hiddenToHiddenWeights[index],mutationRate);
+			hiddenBiases[index] = mutate(clone.hiddenBiases[index],mutationRate);
+		}
+
+
+    	outputNodes = clone.outputNodes; //only one layer
+		hiddenToOutput = mutate(clone.hiddenToOutput,mutationRate);
+		outputBias = mutate(clone.outputBias,mutationRate);
+
+	}
+
+	public Matrix mutate(Matrix layer, double mutationRate){
+		Matrix mut = Matrix.clone(layer);
+		for(int r = 0; r < mut.m.length; r++){
+			for(int c = 0; c < mut.m[0].length; c++){
+				boolean mutate = (Math.random() < mutationRate);
+				boolean negativeShift = (Math.random() > .5);
+				if(mutate) mut.m[r][c] += (negativeShift)?-FeedForward.DELTA_MUTATION_SHIFT:FeedForward.DELTA_MUTATION_SHIFT;
+			}
+		}
+		return mut;
+	}
 
 }
