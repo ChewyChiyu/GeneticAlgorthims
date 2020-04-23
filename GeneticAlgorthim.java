@@ -3,10 +3,10 @@ import java.awt.*;
 public class GeneticAlgorthim{
 
 
-	final static int TEST_MAX_POP = 10;
-	final static double TEST_MUTATION_RATE = .3;
+	final static int TEST_MAX_POP = 100;
+	final static double TEST_MUTATION_RATE = .1;
 
-
+	final static double FITNESS_SCALE = .1;
 
 
 	public int maxPop;
@@ -52,23 +52,23 @@ public class GeneticAlgorthim{
 		}
 	}
 
-	public void update(){
-		if(toNextGeneration){ 
+	public void update(Layout layout){
+		if(checkIfContinueGeneration()){ 
 			//transition to next generation
 			transitionToNextGeneration();
 		}else{
-			stepRobots();
+			stepRobots(layout);
 			checkIfContinueGeneration();
 		}
 
 	}
 
 	public void transitionToNextGeneration(){
-		refreshHighestFitness();
 		Robot best  = pruneHighestFitnessRobot();
 		respawnIntoPool(best);
+				System.out.println(highestFitness);
+
 		generation++;
-		toNextGeneration = true;
 	}
 
 	public Robot pruneHighestFitnessRobot(){
@@ -77,29 +77,33 @@ public class GeneticAlgorthim{
 			if(best == null) best = r;
 			best = (best.fitness < r.fitness) ? r : best;
 		}
+		highestFitness = best.fitness;
 		return best;
 	}
 
-	public void checkIfContinueGeneration(){
+	public boolean checkIfContinueGeneration(){
 		//if all robots dead continue to next generation
-		boolean continueToNext = true;
 		for(Robot r: robots){
-			if(r.alive) continueToNext = false;
+			if(r.alive) return false;
 		}
-
+		return true;
 	}
 
-	public void stepRobots(){
+	public void stepRobots(Layout layout){
 		for(Robot r: robots){
-			r.calcVel();
+			if(!r.alive) continue;
+			r.checkIfTouching(layout);
+			r.calculateFitness(layout);
+			r.calcVel(layout);
 			r.move();
+			r.stepsAlive++;
 		}
 	}
+
 
 	public void draw(Graphics g){
 		for(Robot r : robots){
-			if(r!=null)
-			   r.draw(g);
+			if(r!=null) r.draw(g);
 		}
 	}
 
