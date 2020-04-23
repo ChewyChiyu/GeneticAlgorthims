@@ -47,7 +47,9 @@ public class GeneticAlgorthim{
 	}
 
 	public void respawnIntoPool(Robot best){
-		for(int index = 0; index < robots.length; index++){
+		best.reset(globalSpawn.x,globalSpawn.y);
+		robots[robots.length-1] = best;
+		for(int index = robots.length-2; index >= 0; index--){
 			robots[index] = new Robot(globalSpawn.x,globalSpawn.y,best,mutationRate);
 		}
 	}
@@ -56,6 +58,7 @@ public class GeneticAlgorthim{
 		if(checkIfContinueGeneration()){ 
 			//transition to next generation
 			transitionToNextGeneration();
+
 		}else{
 			stepRobots(layout);
 			checkIfContinueGeneration();
@@ -66,9 +69,8 @@ public class GeneticAlgorthim{
 	public void transitionToNextGeneration(){
 		Robot best  = pruneHighestFitnessRobot();
 		respawnIntoPool(best);
-				System.out.println(highestFitness);
-
 		generation++;
+		Simulation.clearCanvas();
 	}
 
 	public Robot pruneHighestFitnessRobot(){

@@ -1,5 +1,6 @@
 import java.awt.*;
 import javax.swing.*;
+import java.awt.image.BufferedImage;
 
 public class Simulation extends JPanel{
 
@@ -14,6 +15,9 @@ public class Simulation extends JPanel{
 
 	final static Point GOAL_SPAWN = new Point((int)(Simulation.WINDOW_DIMENSION.width*.9),(int)(Simulation.WINDOW_DIMENSION.height*.1));
 
+
+	static BufferedImage canvas = new BufferedImage(Simulation.WINDOW_WIDTH,Simulation.WINDOW_HEIGHT,BufferedImage.TYPE_INT_RGB);
+	static Graphics canvasGraphics = canvas.getGraphics();
 
 	boolean isRunningSimulation = true;
 
@@ -38,6 +42,7 @@ public class Simulation extends JPanel{
 		genetic.populate();
 
 		layout = Layout.ALPHA;
+		Simulation.clearCanvas();
 
 		while(isRunningSimulation){
 			update();
@@ -52,8 +57,19 @@ public class Simulation extends JPanel{
 	}
 
 	public void paintComponent(Graphics g){
+		if(canvas!=null) g.drawImage(canvas,0,0,canvas.getWidth(),canvas.getHeight(),this);
 		if(genetic!=null) genetic.draw(g);
 		if(layout!=null) layout.draw(g);
+	}
+
+	public static void clearCanvas(){
+		canvasGraphics.setColor(Color.WHITE);
+		canvasGraphics.fillRect(0,0,canvas.getWidth(),canvas.getHeight());
+	}
+
+	public static void plotOnCanvas(int x, int y){
+		canvasGraphics.setColor(Color.BLUE);
+		canvasGraphics.fillOval(x,y,2,2);
 	}
 
 	public void loadPanel(){

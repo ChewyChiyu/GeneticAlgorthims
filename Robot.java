@@ -5,6 +5,7 @@ public class Robot{
 
 	final static Color ALIVE_COLOR = Color.GREEN;
 	final static Color DEAD_COLOR = Color.RED;
+	final static Color MUTATED_COLOR = Color.BLUE;
 	final static int DEAD_RADIUS = 10;
 	final static int RADIUS = 10;
 
@@ -28,22 +29,20 @@ public class Robot{
 
 	FeedForward brain;
 
-
 	public double fitness;
-
-
 
 	double x,y;
 
 	public boolean alive;
     public double stepsAlive;
 
-
+    boolean mutated;
 
 	public Robot(double x, double y){
 		fitness = 0;
 		stepsAlive = 0;
 		alive = true;
+		mutated = false;
 		this.x = x;
 		this.y = y;
 		brain = new FeedForward(Robot.BRAIN_INPUT_NODES,Robot.BRAIN_HIDDEN_LAYERS,Robot.BRAIN_HIDDEN_NODES,Robot.BRAIN_OUTPUT_NODES);
@@ -52,14 +51,26 @@ public class Robot{
 	public Robot(double x, double y, Robot parent, double mutationRate){
 		fitness = 0;
 		alive = true;
+		stepsAlive = 0;
+		mutated = true;
 		this.x = x;
 		this.y = y;
 		brain = new FeedForward(parent.brain,mutationRate);
 	}
 
+	public void reset(int x, int y){
+		this.x = x;
+		this.y =y;
+		fitness = 0;
+		stepsAlive = 0;
+		alive = true;
+		mutated = false;
+	}
+
 	public void move(){
 		x+=(Math.sin(theta)*Robot.SPEED);
 		y+=(Math.cos(theta)*Robot.SPEED);
+		Simulation.plotOnCanvas((int)x,(int)y);
 	}
 
 	public void checkIfTouching(Layout layout){
@@ -71,7 +82,7 @@ public class Robot{
 	public void calculateFitness(Layout layout){
 		Obstacle goal = layout.goal;
 		distanceToGoalSquared = distanceToObstacleSquared(goal);
-		fitness = (MAX_DISTANCE_TO_GOAL_SQUARED-distanceToGoalSquared) * GeneticAlgorthim.FITNESS_SCALE;
+		fitness = Math.max(fitness,(MAX_DISTANCE_TO_GOAL_SQUARED-distanceToGoalSquared) * GeneticAlgorthim.FITNESS_SCALE);
 	}
 
 	public double distanceToObstacleX(Obstacle o){
@@ -88,8 +99,6 @@ public class Robot{
 
 
 	public void calcVel(Layout o){
-		System.out.println(theta);
-		System.out.println(clampdistanceToObstacleX() + " " + clampdistanceToObstacleY());
 		double[] data = new double[]{clampdistanceToGoalSquared(),clampdistanceToObstacleX(),clampdistanceToObstacleY()};
 		double[] vel = brain.predict(data);
 		theta = vel[0]*Math.PI*2;
@@ -109,6 +118,7 @@ public class Robot{
 
 	public void draw(Graphics g){
 		Color c = (alive)? Robot.ALIVE_COLOR : Robot.DEAD_COLOR;
+		c = (mutated) ? Robot.MUTATED_COLOR : c;
 		g.setColor(c);
 		if(alive) g.fillOval((int)(x-Robot.RADIUS/2),(int)(y-Robot.RADIUS/2),Robot.RADIUS,Robot.RADIUS);
 		else g.fillOval((int)(x-Robot.RADIUS/2),(int)(y-Robot.RADIUS/2),Robot.DEAD_RADIUS,Robot.DEAD_RADIUS);
