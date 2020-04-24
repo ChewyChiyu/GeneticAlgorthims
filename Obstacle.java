@@ -4,14 +4,16 @@ public class Obstacle{
 
 
 
-	Rectangle mask;
+	public Point mask;
+	public int radius;
 
-	public Obstacle(Rectangle mask){
+	public Obstacle(Point mask, int radius){
 		 this.mask = mask;
+		 this.radius = radius;
 	}
 
 	public void draw(Graphics g){
-		g.fillRect(mask.x,mask.y,mask.width,mask.height);
+		g.fillOval(mask.x-radius,mask.y-radius,radius*2,radius*2);
 	}
 
 

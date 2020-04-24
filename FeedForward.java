@@ -82,30 +82,16 @@ public class FeedForward{
 		hiddenBiases = new Matrix[hiddenLayers];
 		outputNodes = clone.outputNodes; 
 
-		// mutated = Math.random()<mutationRate;
+		inputToHiddenWeight = mutate(clone.inputToHiddenWeight,mutationRate);
 
-		// if(mutated){
-			inputToHiddenWeight = mutate(clone.inputToHiddenWeight,mutationRate);
-
-			for(int index = 0; index < clone.hiddenLayers; index++){
-				hiddenToHiddenWeights[index] = mutate(clone.hiddenToHiddenWeights[index],mutationRate);
-				hiddenBiases[index] = mutate(clone.hiddenBiases[index],mutationRate);
-			}
+		for(int index = 0; index < clone.hiddenLayers; index++){
+			hiddenToHiddenWeights[index] = mutate(clone.hiddenToHiddenWeights[index],mutationRate);
+			hiddenBiases[index] = mutate(clone.hiddenBiases[index],mutationRate);
+		}
     	
-			hiddenToOutput = mutate(clone.hiddenToOutput,mutationRate);
-			outputBias = mutate(clone.outputBias,mutationRate);
-		// }else{
-
-		// 	inputToHiddenWeight = Matrix.clone(clone.inputToHiddenWeight);
-
-		// 	for(int index = 0; index < clone.hiddenLayers; index++){
-		// 		hiddenToHiddenWeights[index] =Matrix.clone(clone.hiddenToHiddenWeights[index]);
-		// 		hiddenBiases[index] = Matrix.clone(clone.hiddenBiases[index]);
-		// 	}
-    	
-		// 	hiddenToOutput = Matrix.clone(clone.hiddenToOutput);
-		// 	outputBias = Matrix.clone(clone.outputBias);
-		// }
+		hiddenToOutput = mutate(clone.hiddenToOutput,mutationRate);
+		outputBias = mutate(clone.outputBias,mutationRate);
+		
 	}
 
 	public Matrix mutate(Matrix layer, double mutationRate){

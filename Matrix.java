@@ -96,17 +96,11 @@ public class Matrix{
 		Matrix act = clone(this);
 		for(int r = 0; r < act.m.length; r++){
 			for(int c = 0; c < act.m[0].length; c++){
-				act.m[r][c] = sigmoid(act.m[r][c]);
+				act.m[r][c] = Function.SIGMOID(act.m[r][c]);
 			}
 		}
 		return act;
 	}
-
-
-	private double sigmoid(double i){
-		return (double) (1/(1 + Math.pow(Math.E, -i)));
-	}
-
 
 
 	public String toString(){

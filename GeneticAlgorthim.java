@@ -4,7 +4,7 @@ public class GeneticAlgorthim{
 
 
 	final static int TEST_MAX_POP = 100;
-	final static double TEST_MUTATION_RATE = .1;
+	final static double TEST_MUTATION_RATE = .15;
 
 	final static double FITNESS_SCALE = .1;
 

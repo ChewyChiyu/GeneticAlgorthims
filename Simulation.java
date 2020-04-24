@@ -11,7 +11,7 @@ public class Simulation extends JPanel{
 
 	final static int SIMULATION_SLEEP_TIME = 4;
 
-	final static Point GLOBAL_SPAWN = new Point((int)(Simulation.WINDOW_DIMENSION.width*.1),(int)(Simulation.WINDOW_DIMENSION.height*.9));
+	final static Point GLOBAL_SPAWN = new Point((int)(Simulation.WINDOW_DIMENSION.width*.05),(int)(Simulation.WINDOW_DIMENSION.height*.95));
 
 	final static Point GOAL_SPAWN = new Point((int)(Simulation.WINDOW_DIMENSION.width*.9),(int)(Simulation.WINDOW_DIMENSION.height*.1));
 
@@ -57,9 +57,10 @@ public class Simulation extends JPanel{
 	}
 
 	public void paintComponent(Graphics g){
+
 		if(canvas!=null) g.drawImage(canvas,0,0,canvas.getWidth(),canvas.getHeight(),this);
-		if(genetic!=null) genetic.draw(g);
 		if(layout!=null) layout.draw(g);
+		if(genetic!=null) genetic.draw(g);
 	}
 
 	public static void clearCanvas(){
